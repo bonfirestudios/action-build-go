@@ -6,19 +6,19 @@ try {
     const versionPath = core.getInput('version-path');
     console.log('versionPath', versionPath);
 
-    const origin = git('remote', 'get-url', 'origin');
+    const origin = await git('remote', 'get-url', 'origin');
     console.log('origin', origin);
 
     const time = (new Date()).toTimeString();
     console.log('build time', time);
 
-    const branch = git('rev-parse', '--abbrev-ref');
+    const branch = await git('rev-parse', '--abbrev-ref');
     console.log('branch', branch);
 
-    const revision = git('rev-parse', 'HEAD');
+    const revision = await git('rev-parse', 'HEAD');
     console.log('revision', revision);
 
-    const revisionTime = git('log', '-1', 'format=%cD')
+    const revisionTime = await git('log', '-1', 'format=%cD')
     console.log('revisionTime', revisionTime);
 
     //console.log('::warning file=index.js,line=7,col=5::testing a warning');
