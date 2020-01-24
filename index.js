@@ -1,33 +1,38 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
-const { exec, spawn } = require('child-process-promise');
+const { spawn } = require('child_process');
 
 try {
     const versionPath = core.getInput('version-path');
     console.log('versionPath', versionPath);
 
-    const origin = await git('remote', 'get-url', 'origin');
-    console.log('origin', origin);
+    const repository = core.getInput('repository');
+    console.log('repository', repository);
+
+    const branch = core.getInput('branch');
+    console.log('branch', branch);
+
+    const revision = core.getInput('revision');
+    console.log('revision', revision);
 
     const time = (new Date()).toTimeString();
     console.log('build time', time);
 
-    const branch = await git('rev-parse', '--abbrev-ref');
-    console.log('branch', branch);
+    const go = spawn('go', ['build', '-v', `ldflags=-X "${versionPath}.origin=git@github.com:${repository}" -X "${versionPath}.branch=${branch}" -X "${versionPath}.revision=${revision}" -X "${versionPath}.version=${revision.slice(0, 7)}" -X "${versionPath}.buildTime=${time}`]);
+    go.stdout.on('data', data => {
+        console.log(data);
+    });
+    go.stderr.on('data', data => {
+        console.warning(data);
+    });
+    go.on('error', error => {
+        core.setFailed(`spawn failed ${error.message}`);
+    });
+    go.on('close', code => {
+        if (code != 0) {
+            core.setFailed(`go build returned ${code}`);
+        }
+    });
 
-    const revision = await git('rev-parse', 'HEAD');
-    console.log('revision', revision);
-
-    const revisionTime = await git('log', '-1', 'format=%cD')
-    console.log('revisionTime', revisionTime);
-
-    //console.log('::warning file=index.js,line=7,col=5::testing a warning');
-    //console.log('::error file=index.js,line=7,col=5::testing an error');
 } catch (error) {
     core.setFailed(error.message);
-}
-
-async function git(...args) {
-    const result = await exec('git', args);
-    return result.stdout.trim();
 }
