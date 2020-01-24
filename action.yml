@@ -1,0 +1,10 @@
+name: 'Build Go'
+description: 'Build a golang application and annotate any problems that occur'
+inputs:
+  version-path:
+    description: 'The go path to the object that has version information that is populated during linking'
+    required: true
+    default: 'go.bonfire.io/util/version'
+runs:
+  using: 'node12'
+  main: 'index.js'
