@@ -1,29 +1,15 @@
 const core = require('@actions/core');
+const github = require('@actions/github');
 const { spawn } = require('child_process');
 
 try {
     const versionPath = core.getInput('version-path');
     console.log('versionPath', versionPath);
 
-    const repository = core.getInput('repository');
-    console.log('repository', repository);
-
-    const branch = core.getInput('branch');
-    console.log('branch', branch);
-
-    const revision = core.getInput('revision');
-    console.log('revision', revision);
-
     const time = (new Date()).toUTCString();
     console.log('build time', time);
 
-    const go = spawn('go', ['build', '-v', `-ldflags=-X "${versionPath}.origin=git@github.com:${repository}" -X "${versionPath}.branch=${branch}" -X "${versionPath}.revision=${revision}" -X "${versionPath}.version=${revision.slice(0, 7)}" -X "${versionPath}.buildTime=${time}"`]);
-    go.stdout.on('data', data => {
-        console.log(data.toString());
-    });
-    go.stderr.on('data', data => {
-        console.warn(data.toString());
-    });
+    const go = spawn('go', ['build', '-v', `-ldflags=-X "${versionPath}.origin=git@github.com:${github.context.repo}" -X "${versionPath}.branch=${github.context.ref}" -X "${versionPath}.revision=${github.context.sha}" -X "${versionPath}.version=${github.context.sha.slice(0, 7)}" -X "${versionPath}.buildTime=${time}"`]);
     go.on('error', error => {
         core.setFailed(`spawn failed ${error.message}`);
     });
