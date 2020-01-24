@@ -14,10 +14,10 @@ try {
     const revision = core.getInput('revision');
     console.log('revision', revision);
 
-    const time = (new Date()).toTimeString();
+    const time = (new Date()).toUTCString();
     console.log('build time', time);
 
-    const go = spawn('go', ['build', '-v', `-ldflags=-X "${versionPath}.origin=git@github.com:${repository}" -X "${versionPath}.branch=${branch}" -X "${versionPath}.revision=${revision}" -X "${versionPath}.version=${revision.slice(0, 7)}" -X "${versionPath}.buildTime=${time}`]);
+    const go = spawn('go', ['build', '-v', `-ldflags=-X "${versionPath}.origin=git@github.com:${repository}" -X "${versionPath}.branch=${branch}" -X "${versionPath}.revision=${revision}" -X "${versionPath}.version=${revision.slice(0, 7)}" -X "${versionPath}.buildTime=${time}"`]);
     go.stdout.on('data', data => {
         console.log(data.toString());
     });
