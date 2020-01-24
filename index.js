@@ -17,7 +17,7 @@ try {
     const time = (new Date()).toTimeString();
     console.log('build time', time);
 
-    const go = spawn('go', ['build', '-v', `ldflags=-X "${versionPath}.origin=git@github.com:${repository}" -X "${versionPath}.branch=${branch}" -X "${versionPath}.revision=${revision}" -X "${versionPath}.version=${revision.slice(0, 7)}" -X "${versionPath}.buildTime=${time}`]);
+    const go = spawn('go', ['build', '-v', `-ldflags=-X "${versionPath}.origin=git@github.com:${repository}" -X "${versionPath}.branch=${branch}" -X "${versionPath}.revision=${revision}" -X "${versionPath}.version=${revision.slice(0, 7)}" -X "${versionPath}.buildTime=${time}`]);
     go.stdout.on('data', data => {
         console.log(data.toString());
     });
