@@ -9,7 +9,12 @@ try {
     const time = (new Date()).toUTCString();
     console.log('build time', time);
 
-    const go = spawn('go', ['build', '-v', `-ldflags=-X "${versionPath}.origin=git@github.com:${github.context.repo}" -X "${versionPath}.branch=${github.context.ref}" -X "${versionPath}.revision=${github.context.sha}" -X "${versionPath}.version=${github.context.sha.slice(0, 7)}" -X "${versionPath}.buildTime=${time}"`]);
+    const go = spawn(
+        'go', [
+        'build',
+        '-v',
+        `-ldflags=-X "${versionPath}.origin=git@github.com:${github.context.repo}" -X "${versionPath}.branch=${github.context.ref}" -X "${versionPath}.revision=${github.context.sha}" -X "${versionPath}.version=${github.context.sha.slice(0, 7)}" -X "${versionPath}.buildTime=${time}"`
+    ], { stdio: ['ignore', 'inherit', 'inherit'] });
     go.on('error', error => {
         core.setFailed(`spawn failed ${error.message}`);
     });
