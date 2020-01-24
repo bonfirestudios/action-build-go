@@ -20,7 +20,7 @@ the times are formatted in RFC2822 format
 ## Example Usage
 
 ```yaml
-uses: bonfirestudios/actions-go@v1
+uses: bonfirestudios/actions-build-go@v1
 with:
     version-path: 'go.bonfire.io/util/version'
 ```
