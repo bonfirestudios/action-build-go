@@ -17,6 +17,11 @@ The version path is used to refer to a version object in the code which is fille
 
 the times are formatted in RFC2822 format
 
+
+### `working-directory`
+
+The working directory to run the build within
+
 ## Example Usage
 
 ```yaml

@@ -5,6 +5,10 @@ inputs:
     description: 'The go path to the object that has version information that is populated during linking'
     required: true
     default: 'go.bonfire.io/util/version'
+  working-directory:
+    description: 'The working directory to build in'
+    required: false
+    default: '.'
 runs:
   using: 'node12'
   main: 'index.js'
