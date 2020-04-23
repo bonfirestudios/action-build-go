@@ -6,6 +6,9 @@ try {
     const versionPath = core.getInput('version-path');
     console.log('versionPath', versionPath);
 
+    const cwd = core.getInput('cwd');
+    console.log('cwd', cwd);
+
     const time = (new Date()).toUTCString();
     console.log('build time', time);
 
@@ -14,7 +17,7 @@ try {
         'build',
         '-v',
         `-ldflags=-X "${versionPath}.origin=git@github.com:${github.context.repo}" -X "${versionPath}.branch=${github.context.ref}" -X "${versionPath}.revision=${github.context.sha}" -X "${versionPath}.version=${github.context.sha.slice(0, 7)}" -X "${versionPath}.buildTime=${time}"`
-    ], { stdio: ['ignore', 'inherit', 'inherit'] });
+    ], { stdio: ['ignore', 'inherit', 'inherit'], cwd: cwd });
     go.on('error', error => {
         core.setFailed(`spawn failed ${error.message}`);
     });
