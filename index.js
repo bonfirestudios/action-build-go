@@ -7,7 +7,7 @@ try {
     console.log('versionPath', versionPath);
 
     const workingDirectory = core.getInput('working-directory');
-    console.log('workingDirectory', cwd);
+    console.log('workingDirectory', workingDirectory);
 
     const time = (new Date()).toUTCString();
     console.log('build time', time);
